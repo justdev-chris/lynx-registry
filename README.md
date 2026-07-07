@@ -27,22 +27,20 @@ Example:
 
 ## 📦 How to Publish
 
-1. Set `name` and `version` in `lynx.toml`
-2. Run `lynx publish`
-3. Upload `<name>-<version>.tar.gz` to this repo:
-   ```bash
-   mkdir -p <name>/<version>
-   cp <name>-<version>.tar.gz <name>/<version>/package.tar.gz
-   git add .
-   git commit -m "Add <name> <version>"
-   git push
-```
+1. Run `lynx publish`
+2. This creates `<name>-<version>.tar.gz`
+3. Upload it to this repo:
+   - Create a folder: `packages/<name>/<version>/`
+   - Copy the tarball there and rename it to `package.tar.gz`
+   - Commit and push
+
+**Don't know how to use the terminal?** Use GitHub's web interface to upload files, or ask someone to help.
 
 ---
 
 📥 How to Install
 
-```bash
+```
 lynx install
 ```
 
