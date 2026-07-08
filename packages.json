@@ -3,7 +3,9 @@
     "meowsys": {
       "description": "🐱 MeowSystem – cat‑themed system library for Lynx. prowl, sniff, hiss, scratch, claw, nap & more.",
       "versions": ["0.1.0"],
-      "latest": "0.1.0"
+      "latest": "0.1.0",
+      "author": "justdev-chris",
+      "badge": "core"
     }
   }
 }
