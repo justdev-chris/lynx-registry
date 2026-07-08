@@ -18,25 +18,48 @@
             min-height: 100vh;
         }
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 6px;
         }
         h1 {
             font-size: 32px;
-            margin-bottom: 4px;
         }
         h1 span {
             color: #00ccff;
+        }
+        .badge {
+            background: #00ccff22;
+            color: #00ccff;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 14px;
+            border: 1px solid #00ccff44;
         }
         .sub {
             color: #888;
             margin-bottom: 24px;
             font-size: 14px;
         }
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 30px;
+            align-items: center;
+        }
         .search-box {
+            flex: 2;
             display: flex;
             gap: 10px;
-            margin-bottom: 30px;
+            min-width: 200px;
         }
         .search-box input {
             flex: 1;
@@ -52,7 +75,7 @@
             border-color: #00ccff;
         }
         .search-box button {
-            padding: 10px 24px;
+            padding: 10px 20px;
             background: #00ccff;
             color: #000;
             border: none;
@@ -63,6 +86,28 @@
         }
         .search-box button:hover {
             background: #00ddff;
+        }
+        .sort-box {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .sort-box label {
+            color: #888;
+            font-size: 13px;
+        }
+        .sort-box select {
+            padding: 8px 12px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+            cursor: pointer;
+        }
+        .sort-box select:focus {
+            border-color: #00ccff;
         }
         .package-list {
             display: flex;
@@ -75,10 +120,11 @@
             border-radius: 10px;
             padding: 14px 18px;
             display: flex;
-            justify-content: space-between;
+            flex-wrap: wrap;
             align-items: center;
+            gap: 10px;
             transition: 0.15s;
-            cursor: default;
+            cursor: pointer;
         }
         .package-item:hover {
             border-color: #00ccff;
@@ -88,30 +134,48 @@
             font-weight: 600;
             color: #fff;
             font-size: 16px;
+            min-width: 120px;
         }
         .package-name span {
             color: #888;
             font-weight: 400;
             font-size: 13px;
-            margin-left: 8px;
+            margin-left: 6px;
         }
         .package-desc {
             color: #aaa;
             font-size: 14px;
             flex: 1;
-            margin: 0 16px;
+            min-width: 120px;
+        }
+        .package-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
         }
         .package-version {
             color: #666;
-            font-size: 13px;
+            font-size: 12px;
             background: #1f1f1f;
             padding: 2px 10px;
             border-radius: 20px;
             border: 1px solid #2a2a2a;
         }
+        .package-downloads {
+            color: #555;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .package-downloads::before {
+            content: "⬇️";
+            font-size: 11px;
+        }
         .install-cmd {
             background: #0d0d0d;
-            padding: 2px 12px;
+            padding: 4px 14px;
             border-radius: 6px;
             font-size: 12px;
             color: #00ccff;
@@ -119,14 +183,14 @@
             cursor: pointer;
             border: 1px solid #2a2a2a;
             transition: 0.15s;
-            margin-left: 12px;
+            white-space: nowrap;
         }
         .install-cmd:hover {
             background: #1a1a1a;
             border-color: #00ccff;
         }
         .status {
-            margin-top: 20px;
+            margin-top: 24px;
             color: #666;
             font-size: 14px;
             text-align: center;
@@ -143,30 +207,142 @@
             text-align: center;
             padding: 40px 0;
         }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 100%;
+            padding: 30px;
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        .modal-close:hover {
+            color: #fff;
+        }
+        .modal h2 {
+            margin-bottom: 6px;
+        }
+        .modal .version {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        .modal .desc {
+            color: #aaa;
+            margin-bottom: 16px;
+        }
+        .modal .install-cmd-big {
+            background: #0d0d0d;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-family: monospace;
+            color: #00ccff;
+            border: 1px solid #2a2a2a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .modal .install-cmd-big button {
+            background: #00ccff;
+            border: none;
+            color: #000;
+            padding: 4px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .modal .downloads-big {
+            color: #666;
+            font-size: 13px;
+            margin-top: 12px;
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1a1a;
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 10px;
+            border: 1px solid #00ccff;
+            font-size: 14px;
+            z-index: 9999;
+            transition: opacity 0.3s;
+            opacity: 1;
+        }
+        .toast.hidden {
+            opacity: 0;
+        }
         @media (max-width: 600px) {
-            .package-item {
-                flex-wrap: wrap;
-                gap: 8px;
+            .controls {
+                flex-direction: column;
             }
-            .package-desc {
-                margin: 0;
+            .search-box {
                 width: 100%;
-                order: 3;
             }
-            .install-cmd {
-                margin-left: 0;
+            .sort-box {
+                width: 100%;
+            }
+            .package-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .package-meta {
+                justify-content: space-between;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🐱 Lynx <span>Registry</span></h1>
+        <div class="header">
+            <h1>🐱 Lynx <span>Registry</span></h1>
+            <span class="badge" id="packageCountBadge">0 packages</span>
+        </div>
         <div class="sub">Browse and discover Lynx packages</div>
 
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search packages..." oninput="filterPackages()">
-            <button onclick="filterPackages()">Search</button>
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search packages..." oninput="filterAndSort()">
+                <button onclick="filterAndSort()">Search</button>
+            </div>
+            <div class="sort-box">
+                <label for="sortSelect">Sort by</label>
+                <select id="sortSelect" onchange="filterAndSort()">
+                    <option value="name">Name (A-Z)</option>
+                    <option value="name-desc">Name (Z-A)</option>
+                    <option value="downloads">Most Downloads</option>
+                    <option value="version">Latest Version</option>
+                </select>
+            </div>
         </div>
 
         <div id="packageList" class="package-list">
@@ -180,9 +356,32 @@
         </div>
     </div>
 
-    <script>
-        let packages = [];
+    <!-- Modal -->
+    <div class="modal" id="detailModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2 id="modalName">package-name</h2>
+            <div class="version" id="modalVersion">v0.0.0</div>
+            <div class="desc" id="modalDesc">Description goes here.</div>
+            <div class="install-cmd-big">
+                <span id="modalInstallCmd">lynx add package-name</span>
+                <button onclick="copyModalInstall()">Copy</button>
+            </div>
+            <div class="downloads-big" id="modalDownloads">⬇️ 0 downloads</div>
+        </div>
+    </div>
 
+    <script>
+        // ─── CONFIG ──────────────────────────────────────────
+        const HITCOUNTS_NAMESPACE = 'lynx-registry';
+        const RATE_LIMIT_MS = 300000; // 5 minutes
+
+        // ─── STATE ──────────────────────────────────────────
+        let packages = [];
+        let currentSort = 'name';
+        let toastTimeout = null;
+
+        // ─── REGISTRY LOAD ──────────────────────────────────
         async function loadRegistry() {
             try {
                 const res = await fetch('packages.json?t=' + Date.now());
@@ -191,8 +390,9 @@
                 packages = Object.entries(data.packages || {}).map(([name, info]) => ({
                     name,
                     description: info.description || '',
-                    version: info.latest || info.versions?.[0] || '0.1.0'
+                    version: info.latest || info.versions?.[0] || '0.1.0',
                 }));
+                await loadAllDownloadCounts();
                 renderPackages(packages);
             } catch (e) {
                 document.getElementById('packageList').innerHTML = `<div class="empty">⚠️ Could not load registry. Try again later.</div>`;
@@ -200,53 +400,228 @@
             }
         }
 
+        // ─── HITCOUNTS ──────────────────────────────────────
+        async function getDownloadCount(pkgName) {
+            try {
+                const res = await fetch(`https://api.hitcounts.com/hit/${HITCOUNTS_NAMESPACE}/${pkgName}/get`);
+                if (!res.ok) return 0;
+                const data = await res.json();
+                return data.value || 0;
+            } catch {
+                return 0;
+            }
+        }
+
+        async function incrementDownloadCount(pkgName) {
+            try {
+                await fetch(`https://api.hitcounts.com/hit/${HITCOUNTS_NAMESPACE}/${pkgName}/inc`, { method: 'POST' });
+            } catch {
+                // Silent fail
+            }
+        }
+
+        async function loadAllDownloadCounts() {
+            for (const pkg of packages) {
+                pkg.downloads = await getDownloadCount(pkg.name);
+            }
+        }
+
+        // ─── RATE LIMITING (localStorage) ──────────────────
+        function canIncrement(pkgName) {
+            const key = `lynx_inc_${pkgName}`;
+            const last = localStorage.getItem(key);
+            if (!last) return true;
+            const elapsed = Date.now() - parseInt(last, 10);
+            return elapsed > RATE_LIMIT_MS;
+        }
+
+        function setIncremented(pkgName) {
+            localStorage.setItem(`lynx_inc_${pkgName}`, String(Date.now()));
+        }
+
+        // ─── TOAST ────────────────────────────────────────────
+        function showToast(msg, isWarning = false) {
+            // Remove existing toast
+            const existing = document.querySelector('.toast');
+            if (existing) existing.remove();
+
+            const el = document.createElement('div');
+            el.className = 'toast';
+            el.textContent = msg;
+            if (isWarning) {
+                el.style.borderColor = '#ffcc00';
+                el.style.color = '#ffcc00';
+            }
+            document.body.appendChild(el);
+
+            if (toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                el.classList.add('hidden');
+                setTimeout(() => el.remove(), 300);
+            }, 2500);
+        }
+
+        // ─── RENDER ──────────────────────────────────────────
         function renderPackages(list) {
             const container = document.getElementById('packageList');
             const count = document.getElementById('packageCount');
+            const badge = document.getElementById('packageCountBadge');
 
             if (list.length === 0) {
                 container.innerHTML = `<div class="empty">No packages found.</div>`;
                 count.textContent = '0 packages';
+                badge.textContent = '0 packages';
                 return;
             }
 
             container.innerHTML = list.map(pkg => `
-                <div class="package-item">
+                <div class="package-item" onclick="openModal('${pkg.name}')">
                     <span class="package-name">${pkg.name} <span>v${pkg.version}</span></span>
                     <span class="package-desc">${pkg.description || 'No description'}</span>
-                    <span class="package-version">${pkg.version}</span>
-                    <span class="install-cmd" onclick="copyInstall('${pkg.name}')">📋 lynx add ${pkg.name}</span>
+                    <div class="package-meta">
+                        <span class="package-version">${pkg.version}</span>
+                        <span class="package-downloads">${pkg.downloads || 0}</span>
+                        <span class="install-cmd" onclick="event.stopPropagation(); handleInstall('${pkg.name}')">📋 lynx add ${pkg.name}</span>
+                    </div>
                 </div>
             `).join('');
 
             count.textContent = `${list.length} package${list.length > 1 ? 's' : ''}`;
+            badge.textContent = `${list.length} package${list.length > 1 ? 's' : ''}`;
         }
 
-        function filterPackages() {
+        // ─── FILTER & SORT ──────────────────────────────────
+        function filterAndSort() {
             const query = document.getElementById('searchInput').value.toLowerCase().trim();
-            if (!query) {
-                renderPackages(packages);
-                return;
+            const sort = document.getElementById('sortSelect').value;
+            currentSort = sort;
+
+            let filtered = packages;
+            if (query) {
+                filtered = packages.filter(p =>
+                    p.name.toLowerCase().includes(query) ||
+                    (p.description && p.description.toLowerCase().includes(query))
+                );
             }
-            const filtered = packages.filter(p =>
-                p.name.toLowerCase().includes(query) ||
-                (p.description && p.description.toLowerCase().includes(query))
-            );
+
+            switch (sort) {
+                case 'name':
+                    filtered.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'name-desc':
+                    filtered.sort((a, b) => b.name.localeCompare(a.name));
+                    break;
+                case 'downloads':
+                    filtered.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
+                    break;
+                case 'version':
+                    filtered.sort((a, b) => b.version.localeCompare(a.version));
+                    break;
+                default:
+                    break;
+            }
+
             renderPackages(filtered);
         }
 
-        function copyInstall(name) {
+        function getCurrentList() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            let filtered = packages;
+            if (query) {
+                filtered = packages.filter(p =>
+                    p.name.toLowerCase().includes(query) ||
+                    (p.description && p.description.toLowerCase().includes(query))
+                );
+            }
+            const sort = document.getElementById('sortSelect').value;
+            switch (sort) {
+                case 'name': filtered.sort((a, b) => a.name.localeCompare(b.name)); break;
+                case 'name-desc': filtered.sort((a, b) => b.name.localeCompare(a.name)); break;
+                case 'downloads': filtered.sort((a, b) => (b.downloads || 0) - (a.downloads || 0)); break;
+                case 'version': filtered.sort((a, b) => b.version.localeCompare(a.version)); break;
+            }
+            return filtered;
+        }
+
+        // ─── INSTALL HANDLER ────────────────────────────────
+        async function handleInstall(name) {
             const cmd = `lynx add ${name}`;
+
+            // Copy to clipboard
+            try {
+                await navigator.clipboard?.writeText(cmd);
+                showToast(`📋 Copied: ${cmd}`);
+            } catch {
+                prompt('Copy this command:', cmd);
+            }
+
+            // Rate limit check
+            if (!canIncrement(name)) {
+                showToast('⏳ Already counted. Try again in 5 minutes.', true);
+                return;
+            }
+
+            // Increment download count
+            await incrementDownloadCount(name);
+            setIncremented(name);
+
+            // Update local count
+            const pkg = packages.find(p => p.name === name);
+            if (pkg) {
+                pkg.downloads = (pkg.downloads || 0) + 1;
+                renderPackages(getCurrentList());
+                if (currentModalPackage && currentModalPackage.name === name) {
+                    document.getElementById('modalDownloads').textContent = `⬇️ ${pkg.downloads} downloads`;
+                }
+            }
+        }
+
+        // ─── MODAL ────────────────────────────────────────────
+        let currentModalPackage = null;
+
+        function openModal(name) {
+            const pkg = packages.find(p => p.name === name);
+            if (!pkg) return;
+            currentModalPackage = pkg;
+            document.getElementById('modalName').textContent = pkg.name;
+            document.getElementById('modalVersion').textContent = `v${pkg.version}`;
+            document.getElementById('modalDesc').textContent = pkg.description || 'No description available.';
+            document.getElementById('modalInstallCmd').textContent = `lynx add ${pkg.name}`;
+            document.getElementById('modalDownloads').textContent = `⬇️ ${pkg.downloads || 0} downloads`;
+            document.getElementById('detailModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').classList.remove('active');
+            currentModalPackage = null;
+        }
+
+        function copyModalInstall() {
+            const cmd = document.getElementById('modalInstallCmd').textContent;
             navigator.clipboard?.writeText(cmd).then(() => {
-                const btn = event.target;
-                const orig = btn.textContent;
-                btn.textContent = '✅ Copied!';
-                setTimeout(() => btn.textContent = orig, 1500);
+                showToast('📋 Copied!');
             }).catch(() => {
                 prompt('Copy this command:', cmd);
             });
+            if (currentModalPackage) {
+                handleInstall(currentModalPackage.name);
+            }
         }
 
+        document.getElementById('detailModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ─── KEYBOARD SHORTCUT ──────────────────────────────
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+        });
+
+        // ─── INIT ──────────────────────────────────────────────
         loadRegistry();
     </script>
 </body>
