@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>🐱 Lynx Registry</title>
     <style>
+        /* ─── RESET & BASE ─────────────────────────────── */
         * {
             margin: 0;
             padding: 0;
@@ -18,16 +19,18 @@
             min-height: 100vh;
         }
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
         }
+
+        /* ─── HEADER ────────────────────────────────────── */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
             flex-wrap: wrap;
             gap: 10px;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
         h1 {
             font-size: 32px;
@@ -48,6 +51,8 @@
             margin-bottom: 24px;
             font-size: 14px;
         }
+
+        /* ─── CONTROLS ──────────────────────────────────── */
         .controls {
             display: flex;
             flex-wrap: wrap;
@@ -109,6 +114,8 @@
         .sort-box select:focus {
             border-color: #00ccff;
         }
+
+        /* ─── PACKAGE LIST ──────────────────────────────── */
         .package-list {
             display: flex;
             flex-direction: column;
@@ -130,6 +137,7 @@
             border-color: #00ccff;
             background: #1a1a1a;
         }
+
         .package-name {
             font-weight: 600;
             color: #fff;
@@ -142,18 +150,85 @@
             font-size: 13px;
             margin-left: 6px;
         }
+
         .package-desc {
             color: #aaa;
             font-size: 14px;
             flex: 1;
             min-width: 120px;
         }
+
         .package-meta {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             flex-wrap: wrap;
         }
+
+        /* ─── AUTHOR AVATAR ─────────────────────────────── */
+        .author-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #2a2a2a;
+            display: inline-block;
+            vertical-align: middle;
+            overflow: hidden;
+            border: 1px solid #333;
+            flex-shrink: 0;
+        }
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .author-name {
+            color: #888;
+            font-size: 12px;
+            text-decoration: none;
+            background: #1f1f1f;
+            padding: 2px 10px 2px 6px;
+            border-radius: 20px;
+            border: 1px solid #2a2a2a;
+            transition: 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+        .author-name:hover {
+            color: #00ccff;
+            border-color: #00ccff;
+        }
+
+        /* ─── AUTHOR BADGE ──────────────────────────────── */
+        .author-badge {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 1px 8px;
+            border-radius: 12px;
+            margin-left: 2px;
+            display: inline-block;
+        }
+        .author-badge.core {
+            background: #00ccff33;
+            color: #00ccff;
+            border: 1px solid #00ccff55;
+        }
+        .author-badge.contributor {
+            background: #ffcc0033;
+            color: #ffcc00;
+            border: 1px solid #ffcc0055;
+        }
+        .author-badge.maintainer {
+            background: #aa66ff33;
+            color: #aa66ff;
+            border: 1px solid #aa66ff55;
+        }
+
         .package-version {
             color: #666;
             font-size: 12px;
@@ -165,7 +240,7 @@
         .package-downloads {
             color: #555;
             font-size: 12px;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 4px;
         }
@@ -189,6 +264,8 @@
             background: #1a1a1a;
             border-color: #00ccff;
         }
+
+        /* ─── STATUS ────────────────────────────────────── */
         .status {
             margin-top: 24px;
             color: #666;
@@ -207,6 +284,8 @@
             text-align: center;
             padding: 40px 0;
         }
+
+        /* ─── MODAL ──────────────────────────────────────── */
         .modal {
             display: none;
             position: fixed;
@@ -214,7 +293,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             align-items: center;
             justify-content: center;
             z-index: 1000;
@@ -227,7 +306,7 @@
             background: #1a1a1a;
             border: 1px solid #2a2a2a;
             border-radius: 16px;
-            max-width: 500px;
+            max-width: 520px;
             width: 100%;
             padding: 30px;
             position: relative;
@@ -246,12 +325,32 @@
             color: #fff;
         }
         .modal h2 {
-            margin-bottom: 6px;
+            margin-bottom: 2px;
+        }
+        .modal .author-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        .modal .author-line .author-avatar {
+            width: 28px;
+            height: 28px;
+        }
+        .modal .author-line a {
+            color: #00ccff;
+            text-decoration: none;
+        }
+        .modal .author-line a:hover {
+            text-decoration: underline;
         }
         .modal .version {
             color: #888;
             font-size: 14px;
-            margin-bottom: 12px;
+            margin-bottom: 6px;
         }
         .modal .desc {
             color: #aaa;
@@ -283,6 +382,8 @@
             font-size: 13px;
             margin-top: 12px;
         }
+
+        /* ─── TOAST ──────────────────────────────────────── */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -298,9 +399,15 @@
             transition: opacity 0.3s;
             opacity: 1;
         }
+        .toast.warning {
+            border-color: #ffcc00;
+            color: #ffcc00;
+        }
         .toast.hidden {
             opacity: 0;
         }
+
+        /* ─── RESPONSIVE ────────────────────────────────── */
         @media (max-width: 600px) {
             .controls {
                 flex-direction: column;
@@ -323,46 +430,55 @@
 </head>
 <body>
     <div class="container">
+        <!-- HEADER -->
         <div class="header">
             <h1>🐱 Lynx <span>Registry</span></h1>
             <span class="badge" id="packageCountBadge">0 packages</span>
         </div>
         <div class="sub">Browse and discover Lynx packages</div>
 
+        <!-- CONTROLS -->
         <div class="controls">
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search packages..." oninput="filterAndSort()">
+                <input type="text" id="searchInput" placeholder="Search packages…" oninput="filterAndSort()" />
                 <button onclick="filterAndSort()">Search</button>
             </div>
             <div class="sort-box">
                 <label for="sortSelect">Sort by</label>
                 <select id="sortSelect" onchange="filterAndSort()">
-                    <option value="name">Name (A-Z)</option>
-                    <option value="name-desc">Name (Z-A)</option>
+                    <option value="name">Name (A–Z)</option>
+                    <option value="name-desc">Name (Z–A)</option>
                     <option value="downloads">Most Downloads</option>
                     <option value="version">Latest Version</option>
                 </select>
             </div>
         </div>
 
+        <!-- PACKAGE LIST -->
         <div id="packageList" class="package-list">
-            <div class="empty">Loading packages...</div>
+            <div class="empty">Loading packages…</div>
         </div>
 
+        <!-- FOOTER -->
         <div class="status">
-            <span id="packageCount"></span> &bull; 
+            <span id="packageCount"></span> &bull;
             <a href="https://github.com/justdev-chris/lynx-registry" target="_blank">GitHub</a> &bull;
             <a href="https://github.com/justdev-chris/lynx-registry#readme" target="_blank">Docs</a>
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- ─── MODAL ─────────────────────────────────────────── -->
     <div class="modal" id="detailModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">&times;</button>
             <h2 id="modalName">package-name</h2>
+            <div class="author-line" id="modalAuthorLine">
+                <span class="author-avatar" id="modalAvatar"><img src="" alt="" /></span>
+                <a href="#" id="modalAuthorLink" target="_blank">anonymous</a>
+                <span class="author-badge" id="modalBadge"></span>
+            </div>
             <div class="version" id="modalVersion">v0.0.0</div>
-            <div class="desc" id="modalDesc">Description goes here.</div>
+            <div class="desc" id="modalDesc">No description available.</div>
             <div class="install-cmd-big">
                 <span id="modalInstallCmd">lynx add package-name</span>
                 <button onclick="copyModalInstall()">Copy</button>
@@ -380,8 +496,9 @@
         let packages = [];
         let currentSort = 'name';
         let toastTimeout = null;
+        let currentModalPackage = null;
 
-        // ─── REGISTRY LOAD ──────────────────────────────────
+        // ─── CORE ──────────────────────────────────────────
         async function loadRegistry() {
             try {
                 const res = await fetch('packages.json?t=' + Date.now());
@@ -391,11 +508,14 @@
                     name,
                     description: info.description || '',
                     version: info.latest || info.versions?.[0] || '0.1.0',
+                    author: info.author || 'anonymous',
+                    badge: info.badge || 'contributor', // core | maintainer | contributor
                 }));
                 await loadAllDownloadCounts();
                 renderPackages(packages);
             } catch (e) {
-                document.getElementById('packageList').innerHTML = `<div class="empty">⚠️ Could not load registry. Try again later.</div>`;
+                document.getElementById('packageList').innerHTML =
+                    `<div class="empty">⚠️ Could not load registry. Try again later.</div>`;
                 console.error(e);
             }
         }
@@ -416,7 +536,7 @@
             try {
                 await fetch(`https://api.hitcounts.com/hit/${HITCOUNTS_NAMESPACE}/${pkgName}/inc`, { method: 'POST' });
             } catch {
-                // Silent fail
+                // silent fail
             }
         }
 
@@ -426,13 +546,12 @@
             }
         }
 
-        // ─── RATE LIMITING (localStorage) ──────────────────
+        // ─── RATE LIMITING ──────────────────────────────────
         function canIncrement(pkgName) {
             const key = `lynx_inc_${pkgName}`;
             const last = localStorage.getItem(key);
             if (!last) return true;
-            const elapsed = Date.now() - parseInt(last, 10);
-            return elapsed > RATE_LIMIT_MS;
+            return Date.now() - parseInt(last, 10) > RATE_LIMIT_MS;
         }
 
         function setIncremented(pkgName) {
@@ -441,17 +560,12 @@
 
         // ─── TOAST ────────────────────────────────────────────
         function showToast(msg, isWarning = false) {
-            // Remove existing toast
             const existing = document.querySelector('.toast');
             if (existing) existing.remove();
 
             const el = document.createElement('div');
-            el.className = 'toast';
+            el.className = `toast${isWarning ? ' warning' : ''}`;
             el.textContent = msg;
-            if (isWarning) {
-                el.style.borderColor = '#ffcc00';
-                el.style.color = '#ffcc00';
-            }
             document.body.appendChild(el);
 
             if (toastTimeout) clearTimeout(toastTimeout);
@@ -474,17 +588,25 @@
                 return;
             }
 
-            container.innerHTML = list.map(pkg => `
+            container.innerHTML = list.map(pkg => {
+                const avatarUrl = `https://github.com/${pkg.author}.png`;
+                const badgeClass = pkg.badge || 'contributor';
+                return `
                 <div class="package-item" onclick="openModal('${pkg.name}')">
                     <span class="package-name">${pkg.name} <span>v${pkg.version}</span></span>
                     <span class="package-desc">${pkg.description || 'No description'}</span>
                     <div class="package-meta">
+                        <a href="https://github.com/${pkg.author}" target="_blank" class="author-name" onclick="event.stopPropagation()">
+                            <span class="author-avatar"><img src="${avatarUrl}" alt="${pkg.author}" loading="lazy" onerror="this.style.display='none'" /></span>
+                            ${pkg.author}
+                            <span class="author-badge ${badgeClass}">${badgeClass}</span>
+                        </a>
                         <span class="package-version">${pkg.version}</span>
                         <span class="package-downloads">${pkg.downloads || 0}</span>
                         <span class="install-cmd" onclick="event.stopPropagation(); handleInstall('${pkg.name}')">📋 lynx add ${pkg.name}</span>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
 
             count.textContent = `${list.length} package${list.length > 1 ? 's' : ''}`;
             badge.textContent = `${list.length} package${list.length > 1 ? 's' : ''}`;
@@ -504,24 +626,27 @@
                 );
             }
 
+            applySort(filtered, sort);
+            renderPackages(filtered);
+        }
+
+        function applySort(list, sort) {
             switch (sort) {
                 case 'name':
-                    filtered.sort((a, b) => a.name.localeCompare(b.name));
+                    list.sort((a, b) => a.name.localeCompare(b.name));
                     break;
                 case 'name-desc':
-                    filtered.sort((a, b) => b.name.localeCompare(a.name));
+                    list.sort((a, b) => b.name.localeCompare(a.name));
                     break;
                 case 'downloads':
-                    filtered.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
+                    list.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
                     break;
                 case 'version':
-                    filtered.sort((a, b) => b.version.localeCompare(a.version));
+                    list.sort((a, b) => b.version.localeCompare(a.version));
                     break;
                 default:
                     break;
             }
-
-            renderPackages(filtered);
         }
 
         function getCurrentList() {
@@ -533,13 +658,7 @@
                     (p.description && p.description.toLowerCase().includes(query))
                 );
             }
-            const sort = document.getElementById('sortSelect').value;
-            switch (sort) {
-                case 'name': filtered.sort((a, b) => a.name.localeCompare(b.name)); break;
-                case 'name-desc': filtered.sort((a, b) => b.name.localeCompare(a.name)); break;
-                case 'downloads': filtered.sort((a, b) => (b.downloads || 0) - (a.downloads || 0)); break;
-                case 'version': filtered.sort((a, b) => b.version.localeCompare(a.version)); break;
-            }
+            applySort(filtered, document.getElementById('sortSelect').value);
             return filtered;
         }
 
@@ -547,7 +666,6 @@
         async function handleInstall(name) {
             const cmd = `lynx add ${name}`;
 
-            // Copy to clipboard
             try {
                 await navigator.clipboard?.writeText(cmd);
                 showToast(`📋 Copied: ${cmd}`);
@@ -555,39 +673,54 @@
                 prompt('Copy this command:', cmd);
             }
 
-            // Rate limit check
             if (!canIncrement(name)) {
                 showToast('⏳ Already counted. Try again in 5 minutes.', true);
                 return;
             }
 
-            // Increment download count
             await incrementDownloadCount(name);
             setIncremented(name);
 
-            // Update local count
             const pkg = packages.find(p => p.name === name);
             if (pkg) {
                 pkg.downloads = (pkg.downloads || 0) + 1;
                 renderPackages(getCurrentList());
                 if (currentModalPackage && currentModalPackage.name === name) {
-                    document.getElementById('modalDownloads').textContent = `⬇️ ${pkg.downloads} downloads`;
+                    updateModal(currentModalPackage);
                 }
             }
         }
 
         // ─── MODAL ────────────────────────────────────────────
-        let currentModalPackage = null;
-
-        function openModal(name) {
-            const pkg = packages.find(p => p.name === name);
-            if (!pkg) return;
-            currentModalPackage = pkg;
+        function updateModal(pkg) {
+            const avatarUrl = `https://github.com/${pkg.author}.png`;
             document.getElementById('modalName').textContent = pkg.name;
             document.getElementById('modalVersion').textContent = `v${pkg.version}`;
             document.getElementById('modalDesc').textContent = pkg.description || 'No description available.';
             document.getElementById('modalInstallCmd').textContent = `lynx add ${pkg.name}`;
             document.getElementById('modalDownloads').textContent = `⬇️ ${pkg.downloads || 0} downloads`;
+
+            const avatarImg = document.querySelector('#modalAvatar img');
+            if (avatarImg) {
+                avatarImg.src = avatarUrl;
+                avatarImg.alt = pkg.author;
+                avatarImg.onerror = function() { this.style.display = 'none'; };
+            }
+            const link = document.getElementById('modalAuthorLink');
+            link.href = `https://github.com/${pkg.author}`;
+            link.textContent = pkg.author;
+
+            const badge = document.getElementById('modalBadge');
+            const badgeType = pkg.badge || 'contributor';
+            badge.textContent = badgeType;
+            badge.className = `author-badge ${badgeType}`;
+        }
+
+        function openModal(name) {
+            const pkg = packages.find(p => p.name === name);
+            if (!pkg) return;
+            currentModalPackage = pkg;
+            updateModal(pkg);
             document.getElementById('detailModal').classList.add('active');
         }
 
@@ -612,7 +745,7 @@
             if (e.target === this) closeModal();
         });
 
-        // ─── KEYBOARD SHORTCUT ──────────────────────────────
+        // ─── KEYBOARD SHORTCUTS ──────────────────────────────
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') closeModal();
             if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
